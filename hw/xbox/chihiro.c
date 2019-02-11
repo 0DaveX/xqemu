@@ -388,13 +388,13 @@ static void machine_set_mediaboard_filesystem(Object *obj, const char *value,
 
 static inline void chihiro_machine_initfn(Object *obj)
 {
-    object_property_add_str(obj, "mediaboard_rom",
+    object_property_add_str(obj, "mediaboard-rom",
                             machine_get_mediaboard_rom,
                             machine_set_mediaboard_rom, NULL);
     object_property_set_description(obj, "mediaboard_rom",
                                     "Chihiro mediaboard ROM", NULL);
 
-    object_property_add_str(obj, "mediaboard_filesystem",
+    object_property_add_str(obj, "mediaboard-filesystem",
                             machine_get_mediaboard_filesystem,
                             machine_set_mediaboard_filesystem, NULL);
     object_property_set_description(obj, "mediaboard_filesystem",
