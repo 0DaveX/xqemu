@@ -88,6 +88,7 @@ endif
 include $(SRC_PATH)/rules.mak
 
 GENERATED_FILES = qemu-version.h config-host.h qemu-options.def
+GENERATED_FILES += include/block/blkmemory.h block/blkmemory.c # added!
 GENERATED_FILES += qapi/qapi-builtin-types.h qapi/qapi-builtin-types.c
 GENERATED_FILES += qapi/qapi-types.h qapi/qapi-types.c
 GENERATED_FILES += qapi/qapi-types-block-core.h qapi/qapi-types-block-core.c
