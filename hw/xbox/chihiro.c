@@ -59,7 +59,10 @@
 #include "qemu/option.h"
 #include "xbox.h"
 
-#include "block/block.h"
+//#include "block/block.h"  //was here originally
+//#include "sysemu/blockdev.h" // should this be added, too
+#include "block/blkmemory.h"
+
 
 #define TYPE_CHIHIRO_MACHINE MACHINE_TYPE_NAME("chihiro")
 
@@ -241,7 +244,7 @@ static void chihiro_ide_interface_init(const char *rom_file,
         assert(rc == rom_size);
         close(fd);
     }
-
+printf("\n I'm here 0 !\n");
     if (filesystem_file && (*filesystem_file != '\x00')) {
         assert(access(filesystem_file, R_OK) == 0);
 
@@ -254,26 +257,53 @@ static void chihiro_ide_interface_init(const char *rom_file,
         assert(rc == filesystem_size);
         close(fd);
     }
+/***
+0DaveX tests
 
-#if 0 // FIXME
+QemuOpts *drive_add(BlockInterfaceType type, int index, const char *file,
+                    const char *optstr);
+DriveInfo *drive_new(QemuOpts *arg, BlockInterfaceType block_default_type);
+
+
+
+*///
+
+
+//#if 0 // FIXME
     /* create the device */
     DriveInfo *dinfo;
     dinfo = g_malloc0(sizeof(*dinfo));
-    dinfo->id = g_strdup("chihiro-interface");
-    dinfo->bdrv = bdrv_new(dinfo->id);
+  //  dinfo->bdrv = bdrv_new();
+
+    dinfo->unit = g_strdup("chihiro-interface"); // unit == id?
+  //  dinfo->devaddr = g_strdup("chihiro-interface"); // FIXME devaddr?
+//    dinfo->bdrv = bdrv_new(dinfo->id);
+// dinfo->devaddr = bdrv_new();
+
+BlockDriverState bds;
+
+bdrv_memory_open(&bds, interface_space, memory_region_size(interface));
+
     dinfo->type = IF_IDE;
     dinfo->bus = 0;
     dinfo->unit = 1;
-    dinfo->refcount = 1;
+//    dinfo->refcount = 1;
 
-    assert(!bdrv_memory_open(dinfo->bdrv, interface_space,
-                             memory_region_size(interface)));
+//    assert(!bdrv_memory_open(dinfo->bdrv, interface_space,
+//                             memory_region_size(interface)));
 
-    drive_append(dinfo);
-#else
-    printf("Chihiro IDE not yet implemented (please fix it)\n");
-    assert(0);
-#endif
+//drive_add(IF_IDE,0,object_property_get_str(qdev_get_machine(), "mediaboard-filesystem", NULL),NULL);
+//    drive_append(dinfo);
+
+//QTAILQ_INSERT_TAIL(&drives, dinfo, next);
+
+
+
+printf("\ntried to create chihiro IDE device\n");
+//#else
+//    printf("Chihiro IDE not yet implemented (please fix it)\n");
+ //   assert(0);
+//#endif
 }
 
 /* Placeholder blank eeprom for chihiro:
